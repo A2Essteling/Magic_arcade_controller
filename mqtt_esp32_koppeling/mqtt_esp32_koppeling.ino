@@ -4,6 +4,7 @@
 WiFiClient esp32Client;
 PubSubClient mqttClient(esp32Client);
 
+// Wifi gegevens
 const char* ssid     = "deproject";
 const char* password = "projectP4";
 
