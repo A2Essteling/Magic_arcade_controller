@@ -4,8 +4,8 @@
 #include <LiquidCrystal_I2C.h>
 
 // WiFi and MQTT broker settings
-const char* ssid = "Xandra-01";
-const char* password = "Auenag-01";
+const char* ssid = "Lasergame";
+const char* password = "avans-01";
 const char* mqtt_server = "broker.hivemq.com";
 
 // Base string and device ID
@@ -138,7 +138,24 @@ void callback(char* topic, byte* payload, unsigned int length) {
   String lcdTopic = String(base_topic) + "/" + String(device_id) + "/lcd";
   if (String(topic) == lcdTopic) {
     lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print(message);
+    int line = 0;
+    String lineContent = "";
+    for (int i = 0; i < message.length(); i++) {
+      if (message[i] == '\n' || lineContent.length() == 15) {
+        lcd.setCursor(0, line);
+        lcd.print(lineContent);
+        line++;
+        lineContent = "";
+        if (line >= 2) {
+          break; // only handle two lines
+        }
+      } else {
+        lineContent += message[i];
+      }
+    }
+    if (line < 2) {
+      lcd.setCursor(0, line);
+      lcd.print(lineContent);
+    }
   }
 }
